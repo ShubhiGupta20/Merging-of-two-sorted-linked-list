@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+    int data;
+    struct Node *link;
+} *temp = NULL, *first = NULL, *second = NULL, *third = NULL, *new = NULL;
+
+struct Node* Create (int Arr[], int n)
+{
+    int i;
+    struct Node *t, *last;
+    temp = (struct Node *) malloc(sizeof(struct Node));
+    temp->data = Arr[0];
+    temp->link = NULL;
+    new = temp;
+
+    for (i = 1; i < n; i++)
+    {
+        t = (struct Node *) malloc(sizeof(struct Node));
+        t->data = Arr[i];
+        t->link = NULL;
+        new->link = t;
+        new = t;
+    }
+    return temp;
+}
+
+void Display(struct Node *p)
+{
+    while (p != NULL)
+    {
+        printf ("%d ", p->data);
+        p = p->link;
+    }
+}
+
+void Merge(struct Node *first, struct Node *second)
+{
+    if (first->data < second->data)
+    {
+        third = new = first;
+        first = first->link;
+        new->link = NULL;
+    }
+    else
+    {
+        third = new = second;
+        second = second->link;
+        new->link = NULL;
+    }
+    
+    while (first != NULL && second != NULL)
+    {
+        if (first->data < second->data)
+        {
+            new->link = first;
+            new = first;
+            first = first->link;
+            new->link = NULL;
+        }
+        else
+        {
+            new->link = second;
+            new = second;
+            second = second->link;
+            new->link = NULL;
+        }
+    }
+    
+    if (first != NULL)
+        new->link = first;
+    else
+        new->link  = second;
+}
+
+int main()
+{
+    int Arr[] = { 3, 4, 7, 9 };
+    int Brr[] = { 2, 5, 6, 8 };
+    first = Create (Arr, 4);
+    second = Create (Brr, 4);
+
+    printf ("1st Linked List: ");
+    Display (first);
+
+    printf ("\n2nd Linked List: ");
+    Display (second);
+
+    Merge (first, second);
+
+    printf ("\n\nMerged Linked List: \n");
+    Display (third);
+  return 0;
+}
